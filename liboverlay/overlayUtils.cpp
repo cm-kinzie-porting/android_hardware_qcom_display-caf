@@ -143,9 +143,11 @@ int getMdpFormat(int format) {
 
 int getMdpFormat(int format, int flags)
 {
-    bool uBwcEnabled = (flags & private_handle_t::PRIV_FLAGS_UBWC_ALIGNED);
+
     bool tileEnabled = (flags & private_handle_t::PRIV_FLAGS_TILE_RENDERED);
 
+#ifdef BOARD_HAS_VENUS_UBWC
+    bool uBwcEnabled = (flags & private_handle_t::PRIV_FLAGS_UBWC_ALIGNED);
     // Use UBWC extension, if UBWC is enabled
     if (uBwcEnabled) {
         switch (format) {
@@ -162,6 +164,7 @@ int getMdpFormat(int format, int flags)
                 break;
         }
     }
+#endif
 
     if(!tileEnabled) {
         return getMdpFormat(format);
